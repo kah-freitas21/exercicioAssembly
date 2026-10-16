@@ -1,0 +1,69 @@
+.data
+    msg1: .asciiz "\nDigite a altura em cm: "
+    msg2: .asciiz "\nMenor altura: "
+    msg3: .asciiz "\nMaior altura: "
+
+.text
+.globl main
+
+main:
+    li $v0, 4
+    la $a0, msg1
+    syscall
+
+    li $v0, 5
+    syscall
+    move $t0, $v0
+
+    move $t1, $t0
+    move $t2, $t0
+
+    li $t3, 1
+
+ler:
+    beq $t3, 15, mostrar
+
+    li $v0, 4
+    la $a0, msg1
+    syscall
+
+    li $v0, 5
+    syscall
+    move $t0, $v0
+
+    blt $t0, $t1, atualizar_menor
+
+continuar:
+    bgt $t0, $t2, atualizar_maior
+
+voltar:
+    addi $t3, $t3, 1
+    j ler
+
+atualizar_menor:
+    move $t1, $t0
+    j continuar
+
+atualizar_maior:
+    move $t2, $t0
+    j voltar
+
+mostrar:
+    li $v0, 4
+    la $a0, msg2
+    syscall
+
+    li $v0, 1
+    move $a0, $t1
+    syscall
+
+    li $v0, 4
+    la $a0, msg3
+    syscall
+
+    li $v0, 1
+    move $a0, $t2
+    syscall
+
+    li $v0, 10
+    syscall
